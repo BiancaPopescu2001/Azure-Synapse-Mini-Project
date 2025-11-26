@@ -1,0 +1,17 @@
+{
+	"name": "openrowset",
+	"properties": {
+		"content": {
+			"query": "----------------------\n-- CREATE CREDENTIAL\n----------------------\n\nCREATE DATABASE SCOPED CREDENTIAL biancacreds\nWITH \n    IDENTITY = 'Managed Identity'\n\n------------------------------\n-- CREATE EXTERNAL DATA SOURCE\n------------------------------\n\nCREATE EXTERNAL DATA SOURCE raw_ext_source\nWITH\n(\n    LOCATION = 'https://synapsedatalakebianca.dfs.core.windows.net/raw',\n    CREDENTIAL = biancacreds\n)\n\n------------------------------\n-- CREATE EXTERNAL FILE FORMAT\n------------------------------\n\nCREATE EXTERNAL FILE FORMAT csv_format\nWITH\n(\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n                        FIELD_TERMINATOR = ''\n    )\n)\n\n\n------------------------------\n-- OPENROWSET FUNCTION\n------------------------------\n\nSELECT \n    * \nFROM \n    OPENROWSET (\n        BULK 'revenue',\n        DATA_SOURCE = 'raw_ext_source',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS AA\n\n------------------------------\n-- CREATE PARQUET FILE FORMAT\n------------------------------\n\n\n\n\nCREATE EXTERNAL FILE FORMAT parquet_format\nWITH\n(\n    FORMAT_TYPE = PARQUET,\n    DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

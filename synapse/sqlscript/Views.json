@@ -1,0 +1,17 @@
+{
+	"name": "Views",
+	"properties": {
+		"content": {
+			"query": "------------------------------\n-- VIEWS\n------------------------------\n\nCREATE VIEW revenue_view\nAS\nSELECT \n    * \nFROM \n    OPENROWSET (\n        BULK 'revenue',\n        DATA_SOURCE = 'raw_ext_source',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS AA\n\nSELECT * FROM revenue_view;\n\nSELECT * FROM revenue_ctas;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
